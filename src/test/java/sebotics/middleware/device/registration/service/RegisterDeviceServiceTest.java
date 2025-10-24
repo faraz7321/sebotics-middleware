@@ -35,11 +35,11 @@ class RegisterDeviceServiceTest {
 
 		RegisterDeviceResponse response = service.execute(request);
 
-		assertThat(response.id()).isNotNull();
+		assertThat(response.deviceId()).isNotNull();
 		assertThat(response.serialNumber()).isEqualTo("Robot-001");
 		assertThat(response.macAddress()).isEqualTo("AA:BB:CC:11:22:33");
 
-		assertThat(repository.findById(response.id()))
+		assertThat(repository.findById(response.deviceId()))
 				.map(DeviceRegistration::getMacAddress)
 				.contains("AA:BB:CC:11:22:33");
 	}

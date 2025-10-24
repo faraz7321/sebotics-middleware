@@ -1,6 +1,8 @@
 package sebotics.middleware.device.registration.service;
 
 import java.util.Locale;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sebotics.middleware.device.entity.DeviceRegistration;
@@ -11,6 +13,8 @@ import sebotics.middleware.device.repository.DeviceRegistrationRepository;
 
 @Service
 public class RegisterDeviceService {
+
+	private static final Logger log = LoggerFactory.getLogger(RegisterDeviceService.class);
 
 	private final DeviceRegistrationRepository repository;
 
@@ -24,12 +28,15 @@ public class RegisterDeviceService {
 		String macAddress = normalizeMacAddress(request.macAddress());
 		String elevatorVendor = request.elevatorVendor().trim();
 
+		log.info("Registering device serialNumber={} elevatorVendor={}", serialNumber, elevatorVendor);
+
 		boolean alreadyRegistered = repository.existsBySerialNumberIgnoreCaseOrMacAddressIgnoreCase(
 				serialNumber,
 				macAddress
 		);
 
 		if (alreadyRegistered) {
+			log.warn("Attempt to register duplicate device serialNumber={} macAddress={}", serialNumber, macAddress);
 			throw new DeviceAlreadyRegisteredException(
 					"Device with provided serial number or MAC address is already registered"
 			);
@@ -38,6 +45,8 @@ public class RegisterDeviceService {
 		DeviceRegistration entity = repository.save(
 				DeviceRegistration.create(serialNumber, macAddress, elevatorVendor)
 		);
+
+		log.info("Successfully registered deviceId={} serialNumber={}", entity.getId(), serialNumber);
 
 		return RegisterDeviceResponse.from(entity);
 	}

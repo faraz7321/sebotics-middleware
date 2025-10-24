@@ -5,7 +5,7 @@ import java.util.UUID;
 import sebotics.middleware.device.entity.DeviceRegistration;
 
 public record RegisterDeviceResponse(
-		UUID id,
+		UUID deviceId,
 		String serialNumber,
 		String macAddress,
 		String elevatorVendor,
