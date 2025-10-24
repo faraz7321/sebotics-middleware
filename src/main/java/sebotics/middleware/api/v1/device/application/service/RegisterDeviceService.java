@@ -27,7 +27,7 @@ public class RegisterDeviceService {
 	public RegisterDeviceResponse execute(RegisterDeviceRequest request) {
 		String serialNumber = request.serialNumber().trim();
 		String macAddress = normalizeMacAddress(request.macAddress());
-		String elevatorVendor = request.elevatorVendor().trim();
+        String elevatorVendor = request.elevatorVendor().trim().toUpperCase(Locale.ROOT);
 
 		log.info("Registering device serialNumber={} elevatorVendor={}", serialNumber, elevatorVendor);
 

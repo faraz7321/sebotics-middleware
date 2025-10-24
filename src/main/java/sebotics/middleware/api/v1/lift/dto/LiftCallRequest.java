@@ -1,4 +1,9 @@
 package sebotics.middleware.api.v1.lift.dto;
 
-public record LiftCallRequest() {
+import jakarta.validation.constraints.NotBlank;
+
+public record LiftCallRequest(
+        @NotBlank(message = "Device id is required")
+        String deviceId
+) {
 }
