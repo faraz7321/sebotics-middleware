@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
@@ -12,7 +13,13 @@ import java.time.ZoneOffset;
 import java.util.UUID;
 
 @Entity
-@Table(name = "device_registrations")
+@Table(
+		name = "device_registrations",
+		indexes = {
+				@Index(name = "idx_device_registrations_serial", columnList = "serial_number"),
+				@Index(name = "idx_device_registrations_mac", columnList = "mac_address")
+		}
+)
 public class DeviceRegistration {
 
 	@Id
@@ -35,10 +42,14 @@ public class DeviceRegistration {
 		// JPA requirement
 	}
 
-	public DeviceRegistration(String serialNumber, String macAddress, String elevatorVendor) {
+	private DeviceRegistration(String serialNumber, String macAddress, String elevatorVendor) {
 		this.serialNumber = serialNumber;
 		this.macAddress = macAddress;
 		this.elevatorVendor = elevatorVendor;
+	}
+
+	public static DeviceRegistration create(String serialNumber, String macAddress, String elevatorVendor) {
+		return new DeviceRegistration(serialNumber, macAddress, elevatorVendor);
 	}
 
 	@PrePersist

@@ -1,32 +1,31 @@
-package sebotics.middleware.device.service;
+package sebotics.middleware.device.registration.service;
 
 import java.util.Locale;
-import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sebotics.middleware.device.dto.DeviceRegistrationRequest;
 import sebotics.middleware.device.entity.DeviceRegistration;
 import sebotics.middleware.device.exception.DeviceAlreadyRegisteredException;
-import sebotics.middleware.device.exception.DeviceNotFoundException;
+import sebotics.middleware.device.registration.dto.RegisterDeviceRequest;
+import sebotics.middleware.device.registration.dto.RegisterDeviceResponse;
 import sebotics.middleware.device.repository.DeviceRegistrationRepository;
 
 @Service
-public class DeviceRegistrationService {
+public class RegisterDeviceService {
 
 	private final DeviceRegistrationRepository repository;
 
-	public DeviceRegistrationService(DeviceRegistrationRepository repository) {
+	public RegisterDeviceService(DeviceRegistrationRepository repository) {
 		this.repository = repository;
 	}
 
 	@Transactional
-	public DeviceRegistration registerDevice(DeviceRegistrationRequest request) {
-		String serial = request.serialNumber().trim();
+	public RegisterDeviceResponse execute(RegisterDeviceRequest request) {
+		String serialNumber = request.serialNumber().trim();
 		String macAddress = normalizeMacAddress(request.macAddress());
 		String elevatorVendor = request.elevatorVendor().trim();
 
 		boolean alreadyRegistered = repository.existsBySerialNumberIgnoreCaseOrMacAddressIgnoreCase(
-				serial,
+				serialNumber,
 				macAddress
 		);
 
@@ -36,20 +35,15 @@ public class DeviceRegistrationService {
 			);
 		}
 
-		DeviceRegistration device = new DeviceRegistration(serial, macAddress, elevatorVendor);
-		return repository.save(device);
-	}
+		DeviceRegistration entity = repository.save(
+				DeviceRegistration.create(serialNumber, macAddress, elevatorVendor)
+		);
 
-	@Transactional
-	public void unregisterDevice(UUID deviceId) {
-		DeviceRegistration device = repository.findById(deviceId)
-				.orElseThrow(() -> new DeviceNotFoundException("Device with id %s not found".formatted(deviceId)));
-		repository.delete(device);
+		return RegisterDeviceResponse.from(entity);
 	}
 
 	private String normalizeMacAddress(String macAddress) {
 		String trimmed = macAddress.trim();
-		String normalized = trimmed.replace('-', ':').toUpperCase(Locale.ROOT);
-		return normalized;
+		return trimmed.replace('-', ':').toUpperCase(Locale.ROOT);
 	}
 }

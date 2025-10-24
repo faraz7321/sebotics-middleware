@@ -1,9 +1,9 @@
-package sebotics.middleware.device.dto;
+package sebotics.middleware.device.registration.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
-public record DeviceRegistrationRequest(
+public record RegisterDeviceRequest(
 		@NotBlank(message = "Serial number is required")
 		String serialNumber,
 
