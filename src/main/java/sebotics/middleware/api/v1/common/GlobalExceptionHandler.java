@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import sebotics.middleware.device.exception.DeviceAlreadyRegisteredException;
-import sebotics.middleware.device.exception.DeviceNotFoundException;
-import sebotics.middleware.device.exception.InvalidDeviceQueryException;
+import sebotics.middleware.api.v1.device.domain.exception.DeviceAlreadyRegisteredException;
+import sebotics.middleware.api.v1.device.domain.exception.DeviceNotFoundException;
+import sebotics.middleware.api.v1.device.domain.exception.InvalidDeviceQueryException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
