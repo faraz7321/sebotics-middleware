@@ -1,22 +1,62 @@
 # Sebotics Middleware
 
-## Endpoint structure
+## Project layout & endpoints
 
-All HTTP routes are versioned under `/api/v1` with resource-specific folders under `src/main/java/sebotics/middleware/api/v1/`:
+### Package map
 
-- `device` implements
-  - `POST /api/v1/device/register`
-  - `DELETE /api/v1/device/unregister/{deviceId}`
-  - `GET /api/v1/device/info`
-- `lift` contains stubs (currently return HTTP 501) for
-  - `POST /api/v1/lift/bind`
-  - `POST /api/v1/lift/unbind`
-  - `POST /api/v1/lift/call`
-  - `GET /api/v1/lift/status`
-  - `POST /api/v1/lift/reserve`
-  - `POST /api/v1/lift/cancel`
+```
+src/main/java/sebotics/middleware/api/v1
+├── common/                     # Shared API infrastructure (responses, errors)
+├── device/
+│   ├── DeviceController.java
+│   ├── service/DeviceApiService.java
+│   ├── dto/
+│   ├── domain/{entity,exception,repository}
+│   └── application/service/{Register,Query,Unregister}
+└── lift/
+    ├── dto/                    # Generic router DTOs (include deviceId)
+    ├── router/                 # Public lift endpoints
+    │   ├── LiftController.java
+    │   └── service/LiftRoutingService.java
+    ├── vendor/ElevatorVendorClient.java  # SPI for elevator vendors
+    ├── kone/service/KoneLiftService.java
+    ├── schindler/service/SchindlerLiftService.java
+    └── lutz/service/LutzLiftService.java
+```
 
-Shared response and exception utilities live in `api/common`. Each version folder mirrors the REST path, hosting its own controller, API service, and DTO sub-packages so new endpoints can be scaffolded quickly.
+Device registration stores which vendor a robot prefers; the router uses that to pick the corresponding vendor client.
+
+### REST reference
+
+#### Device lifecycle
+
+| Method | Path                               | Description                     |
+|--------|------------------------------------|---------------------------------|
+| POST   | `/api/v1/device/register`          | Register device with vendor     |
+| DELETE | `/api/v1/device/unregister/{id}`   | Remove device registration      |
+| GET    | `/api/v1/device/info`              | Lookup via `serialNumber` or `macAddress` |
+
+Example registration:
+```bash
+curl -X POST http://localhost:8080/api/v1/device/register \
+  -H "Content-Type: application/json" \
+  -d '{"serialNumber":"Robot-001","macAddress":"AA:BB:CC:11:22:33","elevatorVendor":"KONE"}'
+```
+
+#### Lift router (unified entry point)
+
+Currently returns `501 Not Implemented` until vendor adapters connected:
+
+| Method | Path                     | Notes                         |
+|--------|--------------------------|-------------------------------|
+| POST   | `/api/v1/lift/bind`      | Body `{ "deviceId": "..." }` |
+| POST   | `/api/v1/lift/unbind`    | Body `{ "deviceId": "..." }` |
+| POST   | `/api/v1/lift/call`      | Body `{ "deviceId": "..." }` |
+| GET    | `/api/v1/lift/status`    | Query `?deviceId=...`          |
+| POST   | `/api/v1/lift/reserve`   | Body `{ "deviceId": "..." }` |
+| POST   | `/api/v1/lift/cancel`    | Body `{ "deviceId": "..." }` |
+
+Behind the scenes `LiftRoutingService` locates the registered device and forwards to the correct vendor client (`KoneLiftService`, `SchindlerLiftService`, `LutzLiftService`). These services implement `ElevatorVendorClient` and currently return `501` placeholders until real elevator APIs are integrated.
 
 ## Running locally
 
