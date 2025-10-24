@@ -25,7 +25,7 @@ class RegisterDeviceServiceTest {
 	private DeviceRegistrationRepository repository;
 
 	@Test
-	@DisplayName("execute should persist new device and normalize identifiers")
+	@DisplayName("execute should persist new device, generate device id, and normalize identifiers")
 	void executePersistsDevice() {
 		RegisterDeviceRequest request = new RegisterDeviceRequest(
 				"Robot-001",
@@ -35,17 +35,17 @@ class RegisterDeviceServiceTest {
 
 		RegisterDeviceResponse response = service.execute(request);
 
-		assertThat(response.deviceId()).isNotNull();
+		assertThat(response.deviceId()).isNotBlank();
 		assertThat(response.serialNumber()).isEqualTo("Robot-001");
 		assertThat(response.macAddress()).isEqualTo("AA:BB:CC:11:22:33");
 
-		assertThat(repository.findById(response.deviceId()))
+		assertThat(repository.findByDeviceIdIgnoreCase(response.deviceId()))
 				.map(DeviceRegistration::getMacAddress)
 				.contains("AA:BB:CC:11:22:33");
 	}
 
 	@Test
-	@DisplayName("execute should reject duplicates by serial number or MAC address")
+	@DisplayName("execute should reject duplicates by serial number and MAC address combination")
 	void executeRejectsDuplicates() {
 		service.execute(new RegisterDeviceRequest(
 				"Robot-001",
@@ -68,7 +68,26 @@ class RegisterDeviceServiceTest {
 				"Acme Elevators"
 		);
 
-		assertThatThrownBy(() -> service.execute(duplicateMac))
+		RegisterDeviceResponse secondDevice = service.execute(duplicateMac);
+		assertThat(secondDevice.deviceId()).isNotBlank();
+	}
+
+	@Test
+	@DisplayName("execute should reject duplicate pairing of serial and MAC even with case differences")
+	void executeRejectsDuplicateCombinationCaseInsensitive() {
+		service.execute(new RegisterDeviceRequest(
+				"Robot-200",
+				"AA:BB:CC:11:22:33",
+				"Acme Elevators"
+		));
+
+		RegisterDeviceRequest duplicateCombination = new RegisterDeviceRequest(
+				"robot-200",
+				"aa:bb:cc:11:22:33",
+				"Acme Elevators"
+		);
+
+		assertThatThrownBy(() -> service.execute(duplicateCombination))
 				.isInstanceOf(DeviceAlreadyRegisteredException.class);
 	}
 }

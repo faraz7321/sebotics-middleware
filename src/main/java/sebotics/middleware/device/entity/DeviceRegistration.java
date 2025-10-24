@@ -16,6 +16,7 @@ import java.util.UUID;
 @Table(
 		name = "device_registrations",
 		indexes = {
+				@Index(name = "idx_device_registrations_device_id", columnList = "device_id"),
 				@Index(name = "idx_device_registrations_serial", columnList = "serial_number"),
 				@Index(name = "idx_device_registrations_mac", columnList = "mac_address")
 		}
@@ -26,10 +27,13 @@ public class DeviceRegistration {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID id;
 
+	@Column(name = "device_id", nullable = false, unique = true, length = 64)
+	private String deviceId;
+
 	@Column(name = "serial_number", nullable = false, unique = true, length = 64)
 	private String serialNumber;
 
-	@Column(name = "mac_address", nullable = false, unique = true, length = 64)
+	@Column(name = "mac_address", nullable = false, length = 64)
 	private String macAddress;
 
 	@Column(name = "elevator_vendor", nullable = false, length = 128)
@@ -42,14 +46,15 @@ public class DeviceRegistration {
 		// JPA requirement
 	}
 
-	private DeviceRegistration(String serialNumber, String macAddress, String elevatorVendor) {
+	private DeviceRegistration(String deviceId, String serialNumber, String macAddress, String elevatorVendor) {
+		this.deviceId = deviceId;
 		this.serialNumber = serialNumber;
 		this.macAddress = macAddress;
 		this.elevatorVendor = elevatorVendor;
 	}
 
-	public static DeviceRegistration create(String serialNumber, String macAddress, String elevatorVendor) {
-		return new DeviceRegistration(serialNumber, macAddress, elevatorVendor);
+	public static DeviceRegistration create(String deviceId, String serialNumber, String macAddress, String elevatorVendor) {
+		return new DeviceRegistration(deviceId, serialNumber, macAddress, elevatorVendor);
 	}
 
 	@PrePersist
@@ -61,6 +66,14 @@ public class DeviceRegistration {
 
 	public UUID getId() {
 		return id;
+	}
+
+	public String getDeviceId() {
+		return deviceId;
+	}
+
+	public void setDeviceId(String deviceId) {
+		this.deviceId = deviceId;
 	}
 
 	public String getSerialNumber() {

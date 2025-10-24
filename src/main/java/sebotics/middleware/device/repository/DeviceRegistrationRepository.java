@@ -9,7 +9,15 @@ public interface DeviceRegistrationRepository extends JpaRepository<DeviceRegist
 
 	Optional<DeviceRegistration> findBySerialNumberIgnoreCase(String serialNumber);
 
-	Optional<DeviceRegistration> findByMacAddressIgnoreCase(String macAddress);
+	boolean existsBySerialNumberIgnoreCase(String serialNumber);
 
-	boolean existsBySerialNumberIgnoreCaseOrMacAddressIgnoreCase(String serialNumber, String macAddress);
+	boolean existsBySerialNumberIgnoreCaseAndMacAddressIgnoreCase(String serialNumber, String macAddress);
+
+	boolean existsByDeviceIdIgnoreCase(String deviceId);
+
+	Optional<DeviceRegistration> findByDeviceIdIgnoreCase(String deviceId);
+
+	Optional<DeviceRegistration> findBySerialNumberIgnoreCaseAndMacAddressIgnoreCase(String serialNumber, String macAddress);
+
+	Optional<DeviceRegistration> findTopByMacAddressIgnoreCaseOrderByRegisteredAtDesc(String macAddress);
 }

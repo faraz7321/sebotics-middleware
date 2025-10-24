@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import sebotics.middleware.common.dto.ApiResponse;
 import sebotics.middleware.device.registration.dto.RegisterDeviceRequest;
 import sebotics.middleware.device.registration.dto.RegisterDeviceResponse;
 import sebotics.middleware.device.registration.service.RegisterDeviceService;
@@ -25,12 +26,13 @@ public class RegisterDeviceController {
 		this.service = service;
 	}
 
-	@PostMapping({"", "/register"})
-	@ResponseStatus(HttpStatus.CREATED)
-	public RegisterDeviceResponse register(@Valid @RequestBody RegisterDeviceRequest request) {
-		log.debug("Received register request serialNumber={} elevatorVendor={}",
-				request.serialNumber(),
-				request.elevatorVendor());
-		return service.execute(request);
-	}
+    @PostMapping({"", "/register"})
+    @ResponseStatus(HttpStatus.CREATED)
+    public ApiResponse<RegisterDeviceResponse> register(@Valid @RequestBody RegisterDeviceRequest request) {
+        log.debug("Received register request serialNumber={} elevatorVendor={}",
+                request.serialNumber(),
+                request.elevatorVendor());
+        RegisterDeviceResponse response = service.execute(request);
+        return ApiResponse.success("Device registered", response);
+    }
 }

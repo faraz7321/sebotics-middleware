@@ -1,10 +1,9 @@
 package sebotics.middleware.device.unregistration.dto;
 
-import jakarta.validation.constraints.NotNull;
-import java.util.UUID;
+import jakarta.validation.constraints.NotBlank;
 
 public record UnregisterDeviceRequest(
-		@NotNull(message = "Device id is required")
-		UUID deviceId
+		@NotBlank(message = "Device id is required")
+		String deviceId
 ) {
 }

@@ -1,6 +1,7 @@
 package sebotics.middleware.device.registration.service;
 
 import java.util.Locale;
+import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -30,25 +31,33 @@ public class RegisterDeviceService {
 
 		log.info("Registering device serialNumber={} elevatorVendor={}", serialNumber, elevatorVendor);
 
-		boolean alreadyRegistered = repository.existsBySerialNumberIgnoreCaseOrMacAddressIgnoreCase(
-				serialNumber,
-				macAddress
-		);
+		boolean serialExists = repository.existsBySerialNumberIgnoreCase(serialNumber);
+		boolean combinationExists = repository.existsBySerialNumberIgnoreCaseAndMacAddressIgnoreCase(serialNumber, macAddress);
 
-		if (alreadyRegistered) {
+		if (serialExists || combinationExists) {
 			log.warn("Attempt to register duplicate device serialNumber={} macAddress={}", serialNumber, macAddress);
 			throw new DeviceAlreadyRegisteredException(
-					"Device with provided serial number or MAC address is already registered"
+					"Device with provided serial number and MAC address is already registered"
 			);
 		}
 
+		String deviceId = generateUniqueDeviceId();
+
 		DeviceRegistration entity = repository.save(
-				DeviceRegistration.create(serialNumber, macAddress, elevatorVendor)
+				DeviceRegistration.create(deviceId, serialNumber, macAddress, elevatorVendor)
 		);
 
-		log.info("Successfully registered deviceId={} serialNumber={}", entity.getId(), serialNumber);
+		log.info("Successfully registered deviceId={} serialNumber={}", entity.getDeviceId(), serialNumber);
 
 		return RegisterDeviceResponse.from(entity);
+	}
+
+	private String generateUniqueDeviceId() {
+		String candidate;
+		do {
+			candidate = "dev-" + UUID.randomUUID();
+		} while (repository.existsByDeviceIdIgnoreCase(candidate));
+		return candidate;
 	}
 
 	private String normalizeMacAddress(String macAddress) {

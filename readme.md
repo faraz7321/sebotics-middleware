@@ -16,6 +16,20 @@ The app reads these values automatically when you export them or use a shell tha
 
 This profile uses H2 and automatically recreates schema changes on each run.
 
+## API response format
+
+All endpoints wrap payloads in a consistent envelope:
+
+```json
+{
+  "code": "SUCCESS",
+  "message": "Human readable status",
+  "data": { "... response-specific ..." }
+}
+```
+
+Error responses use `code` values such as `DEVICE_NOT_FOUND` or `VALIDATION_FAILED`, `message` describes the issue, and `data` may contain validation details when applicable.
+
 ## Building
 
 ```bash

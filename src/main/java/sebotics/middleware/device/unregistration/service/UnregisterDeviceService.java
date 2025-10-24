@@ -1,6 +1,5 @@
 package sebotics.middleware.device.unregistration.service;
 
-import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -23,9 +22,9 @@ public class UnregisterDeviceService {
 
 	@Transactional
 	public void execute(UnregisterDeviceRequest request) {
-		UUID deviceId = request.deviceId();
+		String deviceId = request.deviceId().trim();
 		log.info("Unregistering device deviceId={}", deviceId);
-		DeviceRegistration device = repository.findById(deviceId)
+		DeviceRegistration device = repository.findByDeviceIdIgnoreCase(deviceId)
 				.orElseThrow(() -> {
 					log.warn("Unregister failed - deviceId={} not found", deviceId);
 					return new DeviceNotFoundException("Device with id %s not found".formatted(deviceId));

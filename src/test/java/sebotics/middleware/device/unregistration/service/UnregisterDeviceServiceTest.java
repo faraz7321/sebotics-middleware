@@ -3,14 +3,12 @@ package sebotics.middleware.device.unregistration.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import sebotics.middleware.device.entity.DeviceRegistration;
 import sebotics.middleware.device.exception.DeviceNotFoundException;
 import sebotics.middleware.device.registration.dto.RegisterDeviceRequest;
 import sebotics.middleware.device.registration.service.RegisterDeviceService;
@@ -30,7 +28,7 @@ class UnregisterDeviceServiceTest {
 	@Autowired
 	private DeviceRegistrationRepository repository;
 
-	private UUID existingDeviceId;
+	private String existingDeviceId;
 
 	@BeforeEach
 	void setUp() {
@@ -46,13 +44,13 @@ class UnregisterDeviceServiceTest {
 	void executeDeletesDevice() {
 		unregisterDeviceService.execute(new UnregisterDeviceRequest(existingDeviceId));
 
-		assertThat(repository.findById(existingDeviceId)).isEmpty();
+		assertThat(repository.findByDeviceIdIgnoreCase(existingDeviceId)).isEmpty();
 	}
 
 	@Test
 	@DisplayName("execute should throw when device does not exist")
 	void executeMissingDevice() {
-		UUID missingId = UUID.randomUUID();
+		String missingId = "missing-device";
 
 		assertThatThrownBy(() -> unregisterDeviceService.execute(new UnregisterDeviceRequest(missingId)))
 				.isInstanceOf(DeviceNotFoundException.class);

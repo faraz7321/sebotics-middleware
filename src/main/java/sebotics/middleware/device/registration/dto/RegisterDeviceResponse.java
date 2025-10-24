@@ -1,11 +1,10 @@
 package sebotics.middleware.device.registration.dto;
 
 import java.time.OffsetDateTime;
-import java.util.UUID;
 import sebotics.middleware.device.entity.DeviceRegistration;
 
 public record RegisterDeviceResponse(
-		UUID deviceId,
+		String deviceId,
 		String serialNumber,
 		String macAddress,
 		String elevatorVendor,
@@ -14,7 +13,7 @@ public record RegisterDeviceResponse(
 
 	public static RegisterDeviceResponse from(DeviceRegistration entity) {
 		return new RegisterDeviceResponse(
-				entity.getId(),
+				entity.getDeviceId(),
 				entity.getSerialNumber(),
 				entity.getMacAddress(),
 				entity.getElevatorVendor(),

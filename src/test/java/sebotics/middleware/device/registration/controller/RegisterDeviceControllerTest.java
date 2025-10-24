@@ -68,10 +68,12 @@ class RegisterDeviceControllerTest {
 						.content(objectMapper.writeValueAsString(request)))
 				.andExpect(status().isCreated())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-			.andExpect(jsonPath("$.deviceId").value(response.deviceId()))
-				.andExpect(jsonPath("$.serialNumber").value(request.serialNumber()))
-				.andExpect(jsonPath("$.macAddress").value(request.macAddress()))
-				.andExpect(jsonPath("$.elevatorVendor").value(request.elevatorVendor()));
+				.andExpect(jsonPath("$.code").value("SUCCESS"))
+				.andExpect(jsonPath("$.message").value("Device registered"))
+				.andExpect(jsonPath("$.data.deviceId").value(response.deviceId()))
+				.andExpect(jsonPath("$.data.serialNumber").value(request.serialNumber()))
+				.andExpect(jsonPath("$.data.macAddress").value(request.macAddress()))
+				.andExpect(jsonPath("$.data.elevatorVendor").value(request.elevatorVendor()));
 
 		verify(registerDeviceService).execute(any(RegisterDeviceRequest.class));
 	}
