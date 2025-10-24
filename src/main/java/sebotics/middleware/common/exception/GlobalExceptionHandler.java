@@ -35,7 +35,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 				.map(this::fieldError)
 				.collect(Collectors.toList());
 		return ResponseEntity.badRequest()
-				.body(ApiResponse.failure("VALIDATION_FAILED", "Request validation failed", fieldErrors));
+				.body(ApiResponse.failure(400, "Request validation failed", fieldErrors));
 	}
 
 	@ExceptionHandler(ConstraintViolationException.class)
@@ -48,25 +48,25 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 				))
 				.collect(Collectors.toList());
 		return ResponseEntity.badRequest()
-				.body(ApiResponse.failure("CONSTRAINT_VIOLATION", "Constraint violation encountered", errors));
+				.body(ApiResponse.failure(400, "Constraint violation encountered", errors));
 	}
 
 	@ExceptionHandler(DeviceAlreadyRegisteredException.class)
 	public ResponseEntity<ApiResponse<Void>> handleDeviceAlreadyRegistered(DeviceAlreadyRegisteredException ex) {
 		return ResponseEntity.status(409)
-				.body(ApiResponse.failure("DEVICE_ALREADY_REGISTERED", ex.getMessage()));
+				.body(ApiResponse.failure(409, ex.getMessage()));
 	}
 
 	@ExceptionHandler(DeviceNotFoundException.class)
 	public ResponseEntity<ApiResponse<Void>> handleDeviceNotFound(DeviceNotFoundException ex) {
 		return ResponseEntity.status(404)
-				.body(ApiResponse.failure("DEVICE_NOT_FOUND", ex.getMessage()));
+				.body(ApiResponse.failure(404, ex.getMessage()));
 	}
 
 	@ExceptionHandler(InvalidDeviceQueryException.class)
 	public ResponseEntity<ApiResponse<Void>> handleInvalidDeviceQuery(InvalidDeviceQueryException ex) {
 		return ResponseEntity.badRequest()
-				.body(ApiResponse.failure("INVALID_DEVICE_QUERY", ex.getMessage()));
+				.body(ApiResponse.failure(400, ex.getMessage()));
 	}
 
 	private Map<String, String> fieldError(FieldError error) {

@@ -23,12 +23,12 @@ public class DeviceQueryController {
     }
 
     @GetMapping("/info")
-    public ApiResponse<RegisterDeviceResponse> getDevice(
-            @RequestParam(value = "serialNumber", required = false) String serialNumber,
-            @RequestParam(value = "macAddress", required = false) String macAddress
-    ) {
-        log.debug("Received device lookup request serialNumber={} macAddress={}", serialNumber, macAddress);
-        RegisterDeviceResponse response = deviceQueryService.getDevice(serialNumber, macAddress);
-        return ApiResponse.success("Device retrieved", response);
-    }
+	public ApiResponse<RegisterDeviceResponse> getDevice(
+			@RequestParam(value = "serialNumber", required = false) String serialNumber,
+			@RequestParam(value = "macAddress", required = false) String macAddress
+	) {
+		log.debug("Received device lookup request serialNumber={} macAddress={}", serialNumber, macAddress);
+		RegisterDeviceResponse response = deviceQueryService.getDevice(serialNumber, macAddress);
+		return ApiResponse.success(200, "Device retrieved", response);
+	}
 }
