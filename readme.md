@@ -22,13 +22,13 @@ All endpoints wrap payloads in a consistent envelope:
 
 ```json
 {
-  "code": "SUCCESS",
-  "message": "Human readable status",
+  "errcode": 200,
+  "errmsg": "Human readable status",
   "data": { "... response-specific ..." }
 }
 ```
 
-Error responses use `code` values such as `DEVICE_NOT_FOUND` or `VALIDATION_FAILED`, `message` describes the issue, and `data` may contain validation details when applicable.
+`errcode` aligns with HTTP semantics (e.g., 201 for created resources, 404 for not found, 0 for generic success). `errmsg` carries the human-readable description. The `data` property is omitted when there is no payload, but when validation fails you will receive a list describing the offending fields.
 
 ## Building
 

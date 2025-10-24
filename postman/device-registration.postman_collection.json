@@ -13,18 +13,22 @@
 				{
 					"listen": "test",
 					"script": {
-						"exec": [
-							"pm.test(\"Status is 201\", function () {",
-							"    pm.response.to.have.status(201);",
-							"});",
-							"",
-							"const response = pm.response.json();",
-							"pm.environment.set(\"deviceId\", response.deviceId);",
-							"",
-							"pm.test(\"Response has device id\", function () {",
-							"    pm.expect(response.deviceId).to.exist;",
-							"});"
-						],
+                        "exec": [
+                            "pm.test(\"Status is 201\", function () {",
+                            "    pm.response.to.have.status(201);",
+                            "});",
+                            "",
+                            "const response = pm.response.json();",
+                            "pm.environment.set(\"deviceId\", response.data.deviceId);",
+                            "",
+                            "pm.test(\"Response has device id\", function () {",
+                            "    pm.expect(response.data.deviceId).to.exist;",
+                            "});",
+                            "",
+                            "pm.test(\"errcode is 201\", function () {",
+                            "    pm.expect(response.errcode).to.eql(201);",
+                            "});"
+                        ],
 						"type": "text/javascript",
 						"packages": {},
 						"requests": {}
@@ -75,11 +79,19 @@
 				{
 					"listen": "test",
 					"script": {
-						"exec": [
-							"pm.test(\"Status is 204\", function () {",
-							"    pm.response.to.have.status(204);",
-							"});"
-						],
+                        "exec": [
+                            "pm.test(\"Status is 200\", function () {",
+                            "    pm.response.to.have.status(200);",
+                            "});",
+                            "",
+                            "const response = pm.response.json();",
+                            "pm.test(\"errcode is 200\", function () {",
+                            "    pm.expect(response.errcode).to.eql(200);",
+                            "});",
+                            "pm.test(\"No data present\", function () {",
+                            "    pm.expect(response.data).to.eql(undefined);",
+                            "});"
+                        ],
 						"type": "text/javascript"
 					}
 				}

@@ -47,8 +47,8 @@ class UnregisterDeviceControllerTest {
 
 	mockMvc.perform(delete("/api/devices/{deviceId}/unregister", deviceId))
 		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.code").value("SUCCESS"))
-		.andExpect(jsonPath("$.message").value("Device successfully deleted"))
+		.andExpect(jsonPath("$.errcode").value(200))
+		.andExpect(jsonPath("$.errmsg").value("Device successfully deleted"))
 		.andExpect(jsonPath("$.data").doesNotExist());
 
 		verify(unregisterDeviceService).execute(argThat(request ->

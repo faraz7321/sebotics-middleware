@@ -52,8 +52,8 @@ class DeviceQueryControllerTest {
         mockMvc.perform(get("/api/devices/info")
                         .param("serialNumber", "Robot-400"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value("SUCCESS"))
-                .andExpect(jsonPath("$.message").value("Device retrieved"))
+                .andExpect(jsonPath("$.errcode").value(200))
+                .andExpect(jsonPath("$.errmsg").value("Device retrieved"))
                 .andExpect(jsonPath("$.data.deviceId").value("dev-123"))
                 .andExpect(jsonPath("$.data.serialNumber").value("Robot-400"))
                 .andExpect(jsonPath("$.data.macAddress").value("AA:BB:CC:11:22:33"));

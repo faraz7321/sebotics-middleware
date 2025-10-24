@@ -26,13 +26,13 @@ public class RegisterDeviceController {
 		this.service = service;
 	}
 
-    @PostMapping({"", "/register"})
-    @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<RegisterDeviceResponse> register(@Valid @RequestBody RegisterDeviceRequest request) {
-        log.debug("Received register request serialNumber={} elevatorVendor={}",
-                request.serialNumber(),
-                request.elevatorVendor());
-        RegisterDeviceResponse response = service.execute(request);
-        return ApiResponse.success("Device registered", response);
-    }
+	@PostMapping({"", "/register"})
+	@ResponseStatus(HttpStatus.CREATED)
+	public ApiResponse<RegisterDeviceResponse> register(@Valid @RequestBody RegisterDeviceRequest request) {
+		log.debug("Received register request serialNumber={} elevatorVendor={}",
+				request.serialNumber(),
+				request.elevatorVendor());
+		RegisterDeviceResponse response = service.execute(request);
+		return ApiResponse.success(201, "Device registered", response);
+	}
 }

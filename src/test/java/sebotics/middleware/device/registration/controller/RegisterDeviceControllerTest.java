@@ -64,12 +64,12 @@ class RegisterDeviceControllerTest {
 		when(registerDeviceService.execute(any(RegisterDeviceRequest.class))).thenReturn(response);
 
 		mockMvc.perform(post("/api/devices/register")
-						.contentType(MediaType.APPLICATION_JSON)
-						.content(objectMapper.writeValueAsString(request)))
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(request)))
 				.andExpect(status().isCreated())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$.code").value("SUCCESS"))
-				.andExpect(jsonPath("$.message").value("Device registered"))
+				.andExpect(jsonPath("$.errcode").value(201))
+				.andExpect(jsonPath("$.errmsg").value("Device registered"))
 				.andExpect(jsonPath("$.data.deviceId").value(response.deviceId()))
 				.andExpect(jsonPath("$.data.serialNumber").value(request.serialNumber()))
 				.andExpect(jsonPath("$.data.macAddress").value(request.macAddress()))

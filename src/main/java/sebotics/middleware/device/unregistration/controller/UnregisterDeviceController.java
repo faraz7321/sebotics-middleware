@@ -26,6 +26,6 @@ public class UnregisterDeviceController {
 	public ApiResponse<Void> unregister(@PathVariable String deviceId) {
 		log.debug("Received unregister request deviceId={}", deviceId);
 		service.execute(new UnregisterDeviceRequest(deviceId));
-		return ApiResponse.success("Device successfully deleted");
+		return ApiResponse.success(200, "Device successfully deleted");
 	}
 }
