@@ -1,5 +1,23 @@
 # Sebotics Middleware
 
+## Endpoint structure
+
+All HTTP routes are versioned under `/api/v1` with resource-specific folders under `src/main/java/sebotics/middleware/api/v1/`:
+
+- `device` implements
+  - `POST /api/v1/device/register`
+  - `DELETE /api/v1/device/unregister/{deviceId}`
+  - `GET /api/v1/device/info`
+- `lift` contains stubs (currently return HTTP 501) for
+  - `POST /api/v1/lift/bind`
+  - `POST /api/v1/lift/unbind`
+  - `POST /api/v1/lift/call`
+  - `GET /api/v1/lift/status`
+  - `POST /api/v1/lift/reserve`
+  - `POST /api/v1/lift/cancel`
+
+Shared response and exception utilities live in `api/common`. Each version folder mirrors the REST path, hosting its own controller, API service, and DTO sub-packages so new endpoints can be scaffolded quickly.
+
 ## Running locally
 
 The default configuration targets PostgreSQL (for example a Cloud SQL instance). Create a copy of `.env.example` and fill in your credentials:
