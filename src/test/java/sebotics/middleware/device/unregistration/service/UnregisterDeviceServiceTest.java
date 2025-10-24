@@ -10,10 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import sebotics.middleware.device.exception.DeviceNotFoundException;
-import sebotics.middleware.device.registration.dto.RegisterDeviceRequest;
+import sebotics.middleware.api.device.dto.RegisterDeviceRequest;
 import sebotics.middleware.device.registration.service.RegisterDeviceService;
 import sebotics.middleware.device.repository.DeviceRegistrationRepository;
-import sebotics.middleware.device.unregistration.dto.UnregisterDeviceRequest;
+import sebotics.middleware.api.device.dto.UnregisterDeviceRequest;
 
 @DataJpaTest
 @Import({RegisterDeviceService.class, UnregisterDeviceService.class})

@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sebotics.middleware.device.entity.DeviceRegistration;
 import sebotics.middleware.device.exception.DeviceAlreadyRegisteredException;
-import sebotics.middleware.device.registration.dto.RegisterDeviceRequest;
-import sebotics.middleware.device.registration.dto.RegisterDeviceResponse;
+import sebotics.middleware.api.device.dto.RegisterDeviceRequest;
+import sebotics.middleware.api.device.dto.RegisterDeviceResponse;
 import sebotics.middleware.device.repository.DeviceRegistrationRepository;
 
 @Service

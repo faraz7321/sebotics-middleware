@@ -11,8 +11,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import sebotics.middleware.device.exception.DeviceNotFoundException;
 import sebotics.middleware.device.exception.InvalidDeviceQueryException;
-import sebotics.middleware.device.registration.dto.RegisterDeviceRequest;
-import sebotics.middleware.device.registration.dto.RegisterDeviceResponse;
+import sebotics.middleware.api.device.dto.RegisterDeviceRequest;
+import sebotics.middleware.api.device.dto.RegisterDeviceResponse;
 import sebotics.middleware.device.registration.service.RegisterDeviceService;
 
 @DataJpaTest

@@ -1,4 +1,4 @@
-package sebotics.middleware.device.registration.dto;
+package sebotics.middleware.api.device.dto;
 
 import java.time.OffsetDateTime;
 import sebotics.middleware.device.entity.DeviceRegistration;

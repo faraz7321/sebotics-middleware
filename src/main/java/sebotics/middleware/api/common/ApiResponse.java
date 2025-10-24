@@ -1,4 +1,4 @@
-package sebotics.middleware.common.dto;
+package sebotics.middleware.api.common;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

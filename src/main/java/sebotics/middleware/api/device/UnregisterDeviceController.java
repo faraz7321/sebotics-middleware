@@ -1,4 +1,4 @@
-package sebotics.middleware.device.unregistration.controller;
+package sebotics.middleware.api.device;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import sebotics.middleware.common.dto.ApiResponse;
-import sebotics.middleware.device.unregistration.dto.UnregisterDeviceRequest;
+import sebotics.middleware.api.common.ApiResponse;
+import sebotics.middleware.api.device.dto.UnregisterDeviceRequest;
 import sebotics.middleware.device.unregistration.service.UnregisterDeviceService;
 
 @RestController

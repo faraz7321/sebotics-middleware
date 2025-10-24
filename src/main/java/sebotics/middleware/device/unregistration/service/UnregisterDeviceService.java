@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sebotics.middleware.device.entity.DeviceRegistration;
 import sebotics.middleware.device.exception.DeviceNotFoundException;
 import sebotics.middleware.device.repository.DeviceRegistrationRepository;
-import sebotics.middleware.device.unregistration.dto.UnregisterDeviceRequest;
+import sebotics.middleware.api.device.dto.UnregisterDeviceRequest;
 
 @Service
 public class UnregisterDeviceService {

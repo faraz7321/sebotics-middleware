@@ -1,4 +1,4 @@
-package sebotics.middleware.device.unregistration.dto;
+package sebotics.middleware.api.device.dto;
 
 import jakarta.validation.constraints.NotBlank;
 

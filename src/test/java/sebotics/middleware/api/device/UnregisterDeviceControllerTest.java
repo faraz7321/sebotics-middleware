@@ -1,4 +1,4 @@
-package sebotics.middleware.device.unregistration.controller;
+package sebotics.middleware.api.device;
 
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.doNothing;
@@ -15,7 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.web.servlet.MockMvc;
-import sebotics.middleware.device.unregistration.dto.UnregisterDeviceRequest;
+import sebotics.middleware.api.device.dto.UnregisterDeviceRequest;
 import sebotics.middleware.device.unregistration.service.UnregisterDeviceService;
 
 @WebMvcTest(UnregisterDeviceController.class)
@@ -36,23 +36,23 @@ class UnregisterDeviceControllerTest {
         }
     }
 
-	@Test
-	@DisplayName("DELETE /api/devices/{deviceId}/unregister should delegate to service")
-	void unregisterDeletesDevice() throws Exception {
-	String deviceId = "device-123";
+    @Test
+    @DisplayName("DELETE /api/devices/{deviceId}/unregister should delegate to service")
+    void unregisterDeletesDevice() throws Exception {
+        String deviceId = "device-123";
 
-	doNothing().when(unregisterDeviceService).execute(argThat(request ->
-			request.deviceId().equals(deviceId)
-	));
+        doNothing().when(unregisterDeviceService).execute(argThat(request ->
+                request.deviceId().equals(deviceId)
+        ));
 
-	mockMvc.perform(delete("/api/devices/{deviceId}/unregister", deviceId))
-		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.errcode").value(200))
-		.andExpect(jsonPath("$.errmsg").value("Device successfully deleted"))
-		.andExpect(jsonPath("$.data").doesNotExist());
+        mockMvc.perform(delete("/api/devices/{deviceId}/unregister", deviceId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.errcode").value(200))
+                .andExpect(jsonPath("$.errmsg").value("Device successfully deleted"))
+                .andExpect(jsonPath("$.data").doesNotExist());
 
-		verify(unregisterDeviceService).execute(argThat(request ->
-				request.deviceId().equals(deviceId)
-		));
-	}
+        verify(unregisterDeviceService).execute(argThat(request ->
+                request.deviceId().equals(deviceId)
+        ));
+    }
 }

@@ -9,7 +9,7 @@ import org.springframework.util.StringUtils;
 import sebotics.middleware.device.entity.DeviceRegistration;
 import sebotics.middleware.device.exception.DeviceNotFoundException;
 import sebotics.middleware.device.exception.InvalidDeviceQueryException;
-import sebotics.middleware.device.registration.dto.RegisterDeviceResponse;
+import sebotics.middleware.api.device.dto.RegisterDeviceResponse;
 import sebotics.middleware.device.repository.DeviceRegistrationRepository;
 
 @Service

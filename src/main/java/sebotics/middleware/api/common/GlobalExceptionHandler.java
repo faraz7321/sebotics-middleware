@@ -1,7 +1,6 @@
-package sebotics.middleware.common.exception;
+package sebotics.middleware.api.common;
 
 import jakarta.validation.ConstraintViolationException;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import sebotics.middleware.common.dto.ApiResponse;
 import sebotics.middleware.device.exception.DeviceAlreadyRegisteredException;
 import sebotics.middleware.device.exception.DeviceNotFoundException;
 import sebotics.middleware.device.exception.InvalidDeviceQueryException;
@@ -70,9 +68,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	private Map<String, String> fieldError(FieldError error) {
-		Map<String, String> map = new LinkedHashMap<>();
-		map.put("field", error.getField());
-		map.put("message", error.getDefaultMessage());
-		return map;
+		return Map.of(
+				"field", error.getField(),
+				"message", error.getDefaultMessage()
+		);
 	}
 }

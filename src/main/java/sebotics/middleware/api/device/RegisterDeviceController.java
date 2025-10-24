@@ -1,4 +1,4 @@
-package sebotics.middleware.device.registration.controller;
+package sebotics.middleware.api.device;
 
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import sebotics.middleware.common.dto.ApiResponse;
-import sebotics.middleware.device.registration.dto.RegisterDeviceRequest;
-import sebotics.middleware.device.registration.dto.RegisterDeviceResponse;
+import sebotics.middleware.api.common.ApiResponse;
+import sebotics.middleware.api.device.dto.RegisterDeviceRequest;
+import sebotics.middleware.api.device.dto.RegisterDeviceResponse;
 import sebotics.middleware.device.registration.service.RegisterDeviceService;
 
 @RestController
